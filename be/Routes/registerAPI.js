@@ -1,20 +1,24 @@
-import express, { application, request } from "express";
+import express from "express";
 import bcrypt from "bcrypt";
-import Users from "../model/Users";
-app.post("/register", async (req, res) => {
+import Users from "../model/Users.js"
+
+const registerAPI = express.Router();
+
+registerAPI.post("/register", async (req, res) => {
+  res.send(req.body)
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   if (hashedPassword) {
     const user = new Users({
+      username: request.body.username,
       email: request.body.email,
-      password: hashedPassword,
+      password: hashedPassword
     });
     const result = user.save();
-  } else {
-    res.status(500).send({
-      message: "Password is not hashed successfully!",
-    });
-  }
+    res.status(200).send(result);
+  } 
 });
+
+export default registerAPI;
 
 
