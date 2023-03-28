@@ -1,24 +1,34 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import Users from "../model/Users.js"
+import "../model/Users.js";
+import Users from "../model/Users.js";
+const register = express.Router();
 
-const registerAPI = express.Router();
-
-registerAPI.post("/register", async (req, res) => {
-  res.send(req.body)
+register.post("/register", async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
   if (hashedPassword) {
     const user = new Users({
-      username: request.body.username,
-      email: request.body.email,
-      password: hashedPassword
+      email: req.body.email,
+      password: hashedPassword,
     });
-    const result = user.save();
-    res.status(200).send(result);
-  } 
+
+    const result = await user.save();
+
+    if (result) {
+      res.status(200).send({
+        message: "User created Successfully",
+        result,
+      });
+    } else {
+      res.status(500).send({
+        message: "Password was not hashed successfully",
+      });
+    }
+  } else if (req.body.email === user.email) {
+    res.status(500).send({
+      message: "Use different email",
+    });
+  }
 });
 
-export default registerAPI;
-
-
+export default register;

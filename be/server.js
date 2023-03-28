@@ -1,19 +1,12 @@
 import express from "express";
-import mongoose from "mongoose";
-import bcrypt from "bcrypt"
-import Users from "./model/Users.js";
-import cors from "cors";
-import registerAPI from "./Routes/registerAPI.js";
-const PORT = 6060;
-const MONGO_CONNECTION = "mongodb+srv://database:1234@cluster0.pxig3vm.mongodb.net/?retryWrites=true&w=majority";
+import registerAPI from "./Routes/registerAPI.js"
+import cors from "cors"
+import "./config/mongooseConfig.js";
+const PORT = 2000;
 
-mongoose
-  .connect(MONGO_CONNECTION)
-  .then(() => console.log("Database:DATABASE SUCCESSFULLY CONNECTED!"))
-  .catch((error) => console.error("Database: Error"));
 
 const app = express();
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(registerAPI);
 app.listen(PORT, () => {
